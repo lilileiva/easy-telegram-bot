@@ -11,15 +11,7 @@ This is a simple Telegram bot that can be used to send messages to a Telegram ch
 
 You can get your Telegram token by creating a bot on Telegram. Please follow the instructions on the [Telegram Bot documentation](https://core.telegram.org/bots/tutorial#obtain-your-bot-token):
 
-In this context, a token is a string that authenticates your bot (not your account) on the bot API. Each bot has a unique token which can also be revoked at any time via @BotFather.
-
 Obtaining a token is as simple as contacting @BotFather, issuing the `/newbot` command and following the steps until you're given a new token. You can find a step-by-step guide [here](https://core.telegram.org/bots/features#creating-a-new-bot).
-
-Your token will look something like this:
-
-```
-4839574812:AAFD39kkdpWt3ywyRZergyOLMaJhac60qc
-```
 
 **Make sure to save your token in a secure place, treat it like a password and don't share it with anyone.**
 
