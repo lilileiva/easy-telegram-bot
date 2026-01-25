@@ -49,17 +49,28 @@ bot.sendMessage("Hello, world!");
 
 ### Decorator
 
+You can use the decorator to send messages to a Telegram chat.
+
+The decorator can be used in two ways:
+
+- `BotMessageMode.ON_EXECUTE`: Send a message when the method is executed.
+- `BotMessageMode.ON_FAILURE`: Send a message when the method fails.
+
+By default, it is `BotMessageMode.ON_FAILURE`.
+
+You can also pass a boolean to the decorator to enable or disable the details of the method. By default, it is `false`.
+
 ```typescript
 import { BotMessage, BotMessageMode } from "telegram-bot";
 
 class TestService {
-    @BotMessage("Successful execution!", BotMessageMode.ON_EXECUTE)
+    @BotMessage("Successful execution!", BotMessageMode.ON_EXECUTE, true)
     async performTask() {
         console.log("Performing task...");
         return "Task Done";
     }
 
-    @BotMessage("Failure detected!", BotMessageMode.ON_FAILURE)
+    @BotMessage("Failure detected!", BotMessageMode.ON_FAILURE, true)
     async failTask() {
         console.log("Failing task...");
         throw new Error("Something went wrong");
