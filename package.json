@@ -2,9 +2,14 @@
   "name": "telegram-bot",
   "version": "1.0.0",
   "description": "Telegram bot",
-  "main": "index.js",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "rimraf dist && tsc",
+    "prepublishOnly": "npm run build"
   },
   "keywords": [
     "telegram",
@@ -16,6 +21,8 @@
     "node-telegram-bot-api": "^0.67.0"
   },
   "devDependencies": {
-    "@types/node-telegram-bot-api": "^0.64.13"
+    "@types/node-telegram-bot-api": "^0.64.13",
+    "rimraf": "^6.1.2",
+    "typescript": "^5.9.3"
   }
 }
