@@ -7,7 +7,7 @@ let botInstance: Bot | null = null;
  * @param token Telegram Bot Token
  * @param chatId Telegram Chat ID
  */
-export function initBot(token: string, chatId: string): void {
+export function initBotMiddleware(token: string, chatId: string): void {
     botInstance = new Bot(token, chatId);
 }
 

@@ -52,6 +52,16 @@ By default, it is `BotMessageMode.ON_FAILURE`.
 
 You can also pass a boolean to the decorator to enable or disable the details of the method. By default, it is `false`.
 
+To use the decorators, you must apply te middleware `initBotMiddleware`.
+
+```typescript
+import { initBotMiddleware } from "telegram-bot";
+
+initBotMiddleware("YOUR_BOT_TOKEN", "YOUR_CHAT_ID");
+```
+
+And then you can use the decorator
+
 ```typescript
 import { BotMessage, BotMessageMode } from "telegram-bot";
 
