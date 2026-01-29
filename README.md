@@ -1,6 +1,6 @@
 # Telegram Bot
 
-This is a simple Telegram bot that can be used to send messages to a Telegram chat.
+This is a simple Telegram bot for Node.js that can be used to send messages to a Telegram chat.
 
 ## Features
 
