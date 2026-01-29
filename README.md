@@ -22,7 +22,7 @@ Please check the [How to get Telegram Bot Chat ID](https://gist.github.com/nafie
 ## Installation
 
 ```bash
-npm install telegram-bot
+npm install easy-telegram-bot
 ```
 
 ## Usage
