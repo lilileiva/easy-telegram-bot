@@ -1,5 +1,5 @@
 {
-  "name": "easy-telegram-bot",
+  "name": "@lilileiva/telegram-bot",
   "version": "1.0.0",
   "description": "Telegram bot for Node.js",
   "main": "dist/index.js",
