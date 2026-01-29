@@ -1,7 +1,7 @@
 {
-  "name": "telegram-bot",
+  "name": "easy-telegram-bot",
   "version": "1.0.0",
-  "description": "Telegram bot",
+  "description": "Telegram bot for Node.js",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
@@ -13,7 +13,8 @@
   },
   "keywords": [
     "telegram",
-    "bot"
+    "bot",
+    "telegram-bot"
   ],
   "author": "Liliana Leiva <lilianadelcleiva@gmail.com>",
   "repository": {
