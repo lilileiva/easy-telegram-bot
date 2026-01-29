@@ -8,6 +8,10 @@ let botInstance: Bot | null = null;
  * @param chatId Telegram Chat ID
  */
 export function initBotMiddleware(token: string, chatId: string): void {
+    if (botInstance) {
+        console.warn("Telegram Bot has already been initialized. Call initBotMiddleware() only once.");
+        return;
+    }
     botInstance = new Bot(token, chatId);
 }
 
@@ -17,7 +21,7 @@ export function initBotMiddleware(token: string, chatId: string): void {
  */
 export function getBot(): Bot {
     if (!botInstance) {
-        throw new Error("Telegram Bot has not been initialized. Call initBot() first.");
+        throw new Error("Telegram Bot has not been initialized. Call initBotMiddleware() first.");
     }
     return botInstance;
 }
