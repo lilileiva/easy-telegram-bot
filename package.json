@@ -25,6 +25,9 @@
   "dependencies": {
     "node-telegram-bot-api": "^0.67.0"
   },
+  "publishConfig": {
+    "access": "restricted"
+  },
   "devDependencies": {
     "@types/node-telegram-bot-api": "^0.64.13",
     "rimraf": "^6.1.2",
