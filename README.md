@@ -32,7 +32,7 @@ You can use the bot in two ways:
 ### Call bot method
 
 ```typescript
-import { Bot } from "telegram-bot";
+import { Bot } from "easy-telegram-bot";
 
 const bot = new Bot("YOUR_BOT_TOKEN", "YOUR_CHAT_ID");
 
@@ -55,7 +55,7 @@ You can also pass a boolean to the decorator to enable or disable the details of
 To use the decorators, you must apply te middleware `initBotMiddleware`.
 
 ```typescript
-import { initBotMiddleware } from "telegram-bot";
+import { initBotMiddleware } from "easy-telegram-bot";
 
 initBotMiddleware("YOUR_BOT_TOKEN", "YOUR_CHAT_ID");
 ```
@@ -63,16 +63,16 @@ initBotMiddleware("YOUR_BOT_TOKEN", "YOUR_CHAT_ID");
 And then you can use the decorator
 
 ```typescript
-import { BotMessage, BotMessageMode } from "telegram-bot";
+import { BotMessage, BotMessageMode } from "easy-telegram-bot";
 
 class TestService {
-    @BotMessage("Successful execution!", BotMessageMode.ON_EXECUTE, true)
+    @BotMessage({message: "Successful execution!", mode: BotMessageMode.ON_EXECUTE, details: true})
     async performTask() {
         console.log("Performing task...");
         return "Task Done";
     }
 
-    @BotMessage("Failure detected!", BotMessageMode.ON_FAILURE, true)
+    @BotMessage({message: "Failure detected!", mode: BotMessageMode.ON_FAILURE, details: true})
     async failTask() {
         console.log("Failing task...");
         throw new Error("Something went wrong");
