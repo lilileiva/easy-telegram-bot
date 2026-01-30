@@ -1,14 +1,14 @@
 import { getBot } from "./middleware";
 
-export enum BotMessageMode {
+export enum MessageMode {
     ON_EXECUTE = "ON_EXECUTE",
     ON_FAILURE = "ON_FAILURE",
 }
 
 
-export interface BotMessageOptions {
+export interface BotOptions {
     message: string;
-    mode?: BotMessageMode;
+    mode?: MessageMode;
     details?: boolean;
 }
 
@@ -16,8 +16,8 @@ export interface BotMessageOptions {
  * Decorator to send a Telegram message when a method is executed or fails.
  * @param options Configuration options for the decorator.
  */
-export function BotMessage(options: BotMessageOptions) {
-    const { message, mode = BotMessageMode.ON_FAILURE, details = true } = options;
+export function BotMessage(options: BotOptions) {
+    const { message, mode = MessageMode.ON_FAILURE, details = true } = options;
     return function (
         target: any,
         propertyKey: string,
@@ -34,7 +34,7 @@ export function BotMessage(options: BotMessageOptions) {
                 messageToSend = `${messageToSend}\nDetails: ${JSON.stringify(args)}\nMethod: ${propertyKey}`;
             }
 
-            if (mode === BotMessageMode.ON_EXECUTE) {
+            if (mode === MessageMode.ON_EXECUTE) {
                 await bot.sendMessage(messageToSend);
             }
 
@@ -42,7 +42,7 @@ export function BotMessage(options: BotMessageOptions) {
                 const result = await originalMethod.apply(this, args);
                 return result;
             } catch (error) {
-                if (mode === BotMessageMode.ON_FAILURE) {
+                if (mode === MessageMode.ON_FAILURE) {
                     const errorMessage = `${messageToSend}\nError: ${error instanceof Error ? error.message : String(error)}`;
                     await bot.sendMessage(errorMessage);
                 }

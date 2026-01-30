@@ -3,16 +3,24 @@ import { Bot } from "./bot";
 let botInstance: Bot | null = null;
 
 /**
- * Initializes the global bot instance.
+ * Middleware to initialize the Telegram Bot.
+ * Can be used as Express middleware or called directly.
  * @param token Telegram Bot Token
  * @param chatId Telegram Chat ID
  */
-export function initBotMiddleware(token: string, chatId: string): void {
-    if (botInstance) {
-        console.warn("Telegram Bot has already been initialized. Call initBotMiddleware() only once.");
-        return;
+export function BotMiddleware(token: string, chatId: string) {
+    if (!botInstance) {
+        botInstance = new Bot(token, chatId);
     }
-    botInstance = new Bot(token, chatId);
+
+    return (req: any, res: any, next: () => void) => {
+        if (req) {
+            req.bot = botInstance;
+        }
+        if (next) {
+            next();
+        }
+    };
 }
 
 /**
@@ -21,7 +29,7 @@ export function initBotMiddleware(token: string, chatId: string): void {
  */
 export function getBot(): Bot {
     if (!botInstance) {
-        throw new Error("Telegram Bot has not been initialized. Call initBotMiddleware() first.");
+        throw new Error("Telegram Bot has not been initialized. Call BotMiddleware() first.");
     }
     return botInstance;
 }

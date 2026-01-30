@@ -1,5 +1,5 @@
 import { Bot } from "./src/bot";
-import { initBotMiddleware, getBot } from "./src/middleware";
-import { BotMessage, BotMessageMode } from "./src/decorators";
+import { BotMiddleware, getBot } from "./src/middleware";
+import { BotMessage, MessageMode } from "./src/decorators";
 
-export { Bot, initBotMiddleware, getBot, BotMessage, BotMessageMode };
+export { Bot, BotMiddleware, getBot, BotMessage, MessageMode };
