@@ -12,7 +12,7 @@ export class Bot {
   constructor(token: string, chatId: string) {
 
     this.chatId = chatId;
-    this.bot = new TelegramBot(token, { polling: true });
+    this.bot = new TelegramBot(token, { polling: false });
   }
 
   /**
