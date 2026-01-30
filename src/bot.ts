@@ -3,7 +3,7 @@ import TelegramBot from "node-telegram-bot-api";
 export class Bot {
   private bot: TelegramBot;
   private chatId: string;
-  
+
   /**
    * Initializes the bot with a token and chat ID.
    * @param token The Telegram Bot Token
@@ -24,7 +24,7 @@ export class Bot {
       await this.bot.sendMessage(
         this.chatId,
         message
-    );
+      );
     } catch (error) {
       console.error("Error sending message to bot: ", error)
     }
@@ -35,8 +35,8 @@ export class Bot {
    * @param command The command to listen for.
    * @param callback The callback function to handle poll answers.
    */
-  startPoll(command: string, callback: (msg: any) => void) {
-    this.bot.on(command, callback);
+  onText(command: RegExp, callback: (msg: any) => void) {
+    this.bot.onText(command, callback);
   }
 
   /**
@@ -50,7 +50,7 @@ export class Bot {
         this.chatId,
         photo,
         { caption }
-    );
+      );
     } catch (error) {
       console.error("Error sending photo to bot: ", error)
     }
@@ -67,7 +67,7 @@ export class Bot {
         this.chatId,
         document,
         { caption }
-    );
+      );
     } catch (error) {
       console.error("Error sending document to bot: ", error)
     }
