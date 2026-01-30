@@ -17,7 +17,7 @@ export interface BotMessageOptions {
  * @param options Configuration options for the decorator.
  */
 export function BotMessage(options: BotMessageOptions) {
-    const { message, mode = BotMessageMode.ON_FAILURE, details = false } = options;
+    const { message, mode = BotMessageMode.ON_FAILURE, details = true } = options;
     return function (
         target: any,
         propertyKey: string,

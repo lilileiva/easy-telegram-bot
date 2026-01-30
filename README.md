@@ -50,7 +50,7 @@ The decorator can be used in two ways:
 
 By default, it is `BotMessageMode.ON_FAILURE`.
 
-You can also pass a boolean to the decorator to enable or disable the details of the method. By default, it is `false`.
+You can also pass a boolean to the decorator to enable or disable the details of the method. By default, it is `true`.
 
 To use the decorators, you must apply te middleware `initBotMiddleware`.
 
@@ -66,13 +66,20 @@ And then you can use the decorator
 import { BotMessage, BotMessageMode } from "easy-telegram-bot";
 
 class TestService {
-    @BotMessage({message: "Successful execution!", mode: BotMessageMode.ON_EXECUTE, details: true})
+    @BotMessage({
+        message: "Successful execution!",
+        mode: BotMessageMode.ON_EXECUTE,
+        details: false
+    })
     async performTask() {
         console.log("Performing task...");
         return "Task Done";
     }
 
-    @BotMessage({message: "Failure detected!", mode: BotMessageMode.ON_FAILURE, details: true})
+    @BotMessage({
+        message: "Failure detected!",
+        mode: BotMessageMode.ON_FAILURE
+    })
     async failTask() {
         console.log("Failing task...");
         throw new Error("Something went wrong");
