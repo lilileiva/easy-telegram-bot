@@ -36,7 +36,20 @@ export class Bot {
    * @param callback The callback function to handle poll answers.
    */
   onText(command: RegExp, callback: (msg: any) => void) {
+    this.bot.startPolling();
+    
+    // Standard messages (private/groups)
     this.bot.onText(command, callback);
+    // Channel posts
+    this.bot.on('channel_post', (msg) => {
+      const text = msg.text;
+      if (text) {
+        const match = command.exec(text);
+        if (match) {
+          callback(msg);
+        }
+      }
+    });
   }
 
   /**
