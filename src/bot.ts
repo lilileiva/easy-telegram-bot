@@ -37,17 +37,18 @@ export class Bot {
    */
   onText(command: RegExp, callback: (msg: any) => void) {
     this.bot.startPolling();
-    
+
     // Standard messages (private/groups)
     this.bot.onText(command, callback);
-    // Channel posts
-    this.bot.on('channel_post', (msg) => {
-      const text = msg.text;
-      if (text) {
-        const match = command.exec(text);
-        if (match) {
-          callback(msg);
-        }
+
+    // Channels
+    this.bot.on("channel_post", (msg) => {
+      if (!msg.text) return;
+
+      const regex = new RegExp(command.source, command.flags.replace("g", ""));
+
+      if (regex.test(msg.text)) {
+        callback(msg);
       }
     });
   }
