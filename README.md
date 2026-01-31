@@ -49,13 +49,13 @@ npm install easy-telegram-bot
 
 ### Initialize the Bot
 
-You can use the `Bot` class to interact with the bot.
+You can use `initBot` to initialize the bot.
 
 ```typescript
-import { Bot } from "easy-telegram-bot";
+import { initBot } from "easy-telegram-bot";
 
 // Initialize the bot
-const bot = new Bot("YOUR_BOT_TOKEN", "YOUR_CHAT_ID");
+const bot = initBot("YOUR_BOT_TOKEN", "YOUR_CHAT_ID");
 ```
 
 ### Available Methods

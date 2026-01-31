@@ -1,4 +1,4 @@
-import { getBot } from "./middleware";
+import { getBot } from "./instance";
 
 export enum MessageMode {
     ON_EXECUTE = "ON_EXECUTE",

@@ -1,6 +1,5 @@
 import { Bot } from "./bot";
-
-let botInstance: Bot | null = null;
+import { initBot, getBot } from "./instance";
 
 /**
  * Middleware to initialize the Telegram Bot.
@@ -9,13 +8,11 @@ let botInstance: Bot | null = null;
  * @param chatId Telegram Chat ID
  */
 export function BotMiddleware(token: string, chatId: string) {
-    if (!botInstance) {
-        botInstance = new Bot(token, chatId);
-    }
+    initBot(token, chatId);
 
     return (req: any, res: any, next: () => void) => {
         if (req) {
-            req.bot = botInstance;
+            req.bot = getBot();
         }
         if (next) {
             next();
@@ -23,24 +20,3 @@ export function BotMiddleware(token: string, chatId: string) {
     };
 }
 
-/**
- * Initializes the Telegram Bot.
- * @param token Telegram Bot Token
- * @param chatId Telegram Chat ID
- */
-export function initBot(token: string, chatId: string) {
-    if (!botInstance) {
-        botInstance = new Bot(token, chatId);
-    }
-}
-
-/**
- * Retrieves the global bot instance.
- * @throws Error if the bot has not been initialized.
- */
-export function getBot(): Bot {
-    if (!botInstance) {
-        throw new Error("Telegram Bot has not been initialized.");
-    }
-    return botInstance;
-}
