@@ -5,7 +5,7 @@ export enum BotMode {
     ON_FAILURE = "ON_FAILURE",
 }
 
-export interface BotOptions {
+export interface MessageOptions {
     message: string;
     mode?: BotMode;
     details?: boolean;
@@ -49,7 +49,7 @@ export function BotOnText(regex: RegExp) {
  * Decorator to send a Telegram message when a method is executed or fails.
  * @param options Configuration options for the decorator.
  */
-export function BotMessage(options: BotOptions) {
+export function BotMessage(options: MessageOptions) {
     const { message, mode = BotMode.ON_EXECUTE, details = true } = options;
     return function (
         target: any,
