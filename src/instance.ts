@@ -14,7 +14,7 @@ const pendingListeners: PendingListener[] = [];
  * @param token Telegram Bot Token
  * @param chatId Telegram Chat ID
  */
-export function initBot(token: string, chatId: string) {
+export function initBot(token: string, chatId: string): Bot {
     if (!botInstance) {
         botInstance = new Bot(token, chatId);
 
@@ -24,6 +24,7 @@ export function initBot(token: string, chatId: string) {
 
         pendingListeners.length = 0;
     }
+    return botInstance;
 }
 
 /**
