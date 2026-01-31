@@ -1,23 +1,49 @@
 name: Publish Package to npmjs
 
 on:
-  push:
+  pull_request:
+    types:
+      - closed
     branches:
       - main
 
 jobs:
-  build:
+  publish:
+    if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
           node-version: '20.x'
           registry-url: 'https://registry.npmjs.org'
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
       
-      - run: npm ci
-      - run: npm run build
+      - name: Install Dependencies
+        run: npm ci
       
-      - run: npm publish
+      - name: Build
+        run: npm run build
+      
+      - name: Setup Git User
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Bump version and tag
+        run: npm run release
+        
+      - name: Push changes
+        run: git push --follow-tags origin main
+
+      - name: Publish
+        run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
