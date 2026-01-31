@@ -1,7 +1,7 @@
 {
-  "name": "telegram-bot",
-  "version": "1.0.0",
-  "description": "Telegram bot",
+  "name": "easy-telegram-bot",
+  "version": "1.0.9",
+  "description": "Telegram bot for Node.js",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
@@ -13,7 +13,8 @@
   },
   "keywords": [
     "telegram",
-    "bot"
+    "bot",
+    "telegram-bot"
   ],
   "author": "Liliana Leiva <lilianadelcleiva@gmail.com>",
   "repository": {
@@ -23,6 +24,9 @@
   "license": "ISC",
   "dependencies": {
     "node-telegram-bot-api": "^0.67.0"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "devDependencies": {
     "@types/node-telegram-bot-api": "^0.64.13",

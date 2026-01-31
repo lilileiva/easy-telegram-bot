@@ -3,7 +3,7 @@ import TelegramBot from "node-telegram-bot-api";
 export class Bot {
   private bot: TelegramBot;
   private chatId: string;
-  
+
   /**
    * Initializes the bot with a token and chat ID.
    * @param token The Telegram Bot Token
@@ -24,9 +24,66 @@ export class Bot {
       await this.bot.sendMessage(
         this.chatId,
         message
-    );
+      );
     } catch (error) {
       console.error("Error sending message to bot: ", error)
+    }
+  }
+
+  /**
+   * Starts listening for poll answers.
+   * @param command The command to listen for.
+   * @param callback The callback function to handle poll answers.
+   */
+  onText(command: RegExp, callback: (msg: any) => void) {
+    this.bot.startPolling();
+
+    // Standard messages (private/groups)
+    this.bot.onText(command, callback);
+
+    // Channels
+    this.bot.on("channel_post", (msg) => {
+      if (!msg.text) return;
+
+      const regex = new RegExp(command.source, command.flags.replace("g", ""));
+
+      if (regex.test(msg.text)) {
+        callback(msg);
+      }
+    });
+  }
+
+  /**
+   * Sends a photo to the bot.
+   * @param photo The photo to send
+   * @param caption The caption to send
+   */
+  async sendPhoto(photo: string | Buffer, caption?: string) {
+    try {
+      await this.bot.sendPhoto(
+        this.chatId,
+        photo,
+        { caption }
+      );
+    } catch (error) {
+      console.error("Error sending photo to bot: ", error)
+    }
+  }
+
+  /**
+   * Sends a document to the bot.
+   * @param document The document to send
+   * @param caption The caption to send
+   */
+  async sendDocument(document: string | Buffer, caption?: string) {
+    try {
+      await this.bot.sendDocument(
+        this.chatId,
+        document,
+        { caption }
+      );
+    } catch (error) {
+      console.error("Error sending document to bot: ", error)
     }
   }
 }
