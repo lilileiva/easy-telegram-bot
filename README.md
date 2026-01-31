@@ -98,9 +98,9 @@ bot.onText(/\/hello/, (msg) => {
 
 ## Decorator Usage
 
-The library provides a `@BotMessage` decorator for automatically sending messages when a method runs or fails.
+The library provides decorators for automatically run the bot when a method runs or fails.
 
-### Message Modes
+### Bot Modes
 
 `ON_EXECUTE`
 Sends a message when the method executes successfully.
@@ -113,7 +113,7 @@ Sends a message only when the method throws an error.
 | Option | Type | Default | Description |
 | --- | --- | --- | --- |
 | message | string | - | Message sent to Telegram |
-| mode | MessageMode | ON_FAILURE | When to send the message |
+| mode | BotMode | ON_FAILURE | When to send the message |
 | details | boolean | true | Include method details |
 
 ### Initializing the Bot (Required for Decorators)
@@ -130,15 +130,16 @@ import { initBot } from "easy-telegram-bot";
 initBot("YOUR_BOT_TOKEN", "YOUR_CHAT_ID");
 ```
 
-#### Using the Decorator
+#### Using the Decorators
 
 ```typescript
-import { BotMessage, MessageMode } from "easy-telegram-bot";
+import { BotMessage, BotPhoto, BotDocument, BotOnText, BotMode } from "easy-telegram-bot";
 
 class TestService {
+    // Send message on execute
     @BotMessage({
         message: "Successful execution!",
-        mode: MessageMode.ON_EXECUTE,
+        mode: BotMode.ON_EXECUTE,
         details: false
     })
     async performTask() {
@@ -146,13 +147,41 @@ class TestService {
         return "Task Done";
     }
 
+    // Send message on failure
     @BotMessage({
         message: "Failure detected!",
-        mode: MessageMode.ON_FAILURE
+        mode: BotMode.ON_FAILURE
     })
     async failTask() {
         console.log("Failing task...");
         throw new Error("Something went wrong");
+    }
+
+    // Listen for /start command
+    @BotOnText(/\/start/)
+    startCommand(msg: any) {
+        console.log("Start command received", msg);
+        // Logic here
+    }
+
+    // Send photo on execute
+    @BotPhoto({
+        photo: "./path/to/success.jpg",
+        caption: "Task Completed",
+        mode: BotMode.ON_EXECUTE
+    })
+    async photoTask() {
+        // ...
+    }
+
+    // Send document on execute
+    @BotDocument({
+        document: "./path/to/success.jpg",
+        caption: "Task Completed",
+        mode: BotMode.ON_EXECUTE
+    })
+    async documentTask() {
+        // ...
     }
 }
 ```
