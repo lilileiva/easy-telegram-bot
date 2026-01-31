@@ -1,18 +1,17 @@
 name: Publish Package to npmjs
 
 on:
-  pull_request:
-    types:
-      - closed
-    branches:
-      - main
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
 
 jobs:
   publish:
-    if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     permissions:
-      contents: write
+      contents: read
+      id-token: write 
 
     steps:
       - name: Checkout
@@ -32,17 +31,6 @@ jobs:
       - name: Build
         run: npm run build
       
-      - name: Setup Git User
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-
-      - name: Bump version and tag
-        run: npm run release
-        
-      - name: Push changes
-        run: git push --follow-tags origin main
-
       - name: Publish
         run: npm publish
         env:
