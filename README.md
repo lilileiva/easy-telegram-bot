@@ -102,10 +102,10 @@ The library provides decorators for automatically run the bot when a method runs
 
 ### Bot Modes
 
-`ON_EXECUTE`
+`ON_EXECUTE` (default)
 Sends a message when the method executes successfully.
 
-`ON_FAILURE` (default)
+`ON_FAILURE`
 Sends a message only when the method throws an error.
 
 ### Decorator Options
@@ -113,7 +113,7 @@ Sends a message only when the method throws an error.
 | Option | Type | Default | Description |
 | --- | --- | --- | --- |
 | message | string | - | Message sent to Telegram |
-| mode | BotMode | ON_FAILURE | When to send the message |
+| mode | BotMode | ON_EXECUTE | When to send the message |
 | details | boolean | true | Include method details |
 
 ### Initializing the Bot (Required for Decorators)
@@ -136,10 +136,9 @@ initBot("YOUR_BOT_TOKEN", "YOUR_CHAT_ID");
 import { BotMessage, BotPhoto, BotDocument, BotOnText, BotMode } from "easy-telegram-bot";
 
 class TestService {
-    // Send message on execute
+    // Send message on execute without details
     @BotMessage({
         message: "Successful execution!",
-        mode: BotMode.ON_EXECUTE,
         details: false
     })
     async performTask() {
@@ -147,7 +146,7 @@ class TestService {
         return "Task Done";
     }
 
-    // Send message on failure
+    // Send message on failure with details
     @BotMessage({
         message: "Failure detected!",
         mode: BotMode.ON_FAILURE

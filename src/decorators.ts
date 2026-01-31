@@ -50,7 +50,7 @@ export function BotOnText(regex: RegExp) {
  * @param options Configuration options for the decorator.
  */
 export function BotMessage(options: BotOptions) {
-    const { message, mode = BotMode.ON_FAILURE, details = true } = options;
+    const { message, mode = BotMode.ON_EXECUTE, details = true } = options;
     return function (
         target: any,
         propertyKey: string,
@@ -92,7 +92,7 @@ export function BotMessage(options: BotOptions) {
  * @param options Configuration options for the decorator.
  */
 export function BotPhoto(options: PhotoOptions) {
-    const { photo, caption, mode = BotMode.ON_FAILURE, details = true } = options;
+    const { photo, caption, mode = BotMode.ON_EXECUTE, details = true } = options;
     return function (
         target: any,
         propertyKey: string,
@@ -134,7 +134,7 @@ export function BotPhoto(options: PhotoOptions) {
  * @param options Configuration options for the decorator.
  */
 export function BotDocument(options: DocumentOptions) {
-    const { document, caption, mode = BotMode.ON_FAILURE, details = true } = options;
+    const { document, caption, mode = BotMode.ON_EXECUTE, details = true } = options;
     return function (
         target: any,
         propertyKey: string,
