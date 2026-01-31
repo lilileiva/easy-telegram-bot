@@ -1,8 +1,8 @@
-# Easy Telegram Bot (Node.js)
+# 🤖 Easy Telegram Bot (Node.js)
 
 A lightweight Node.js library for sending messages to a Telegram chat, with optional decorators for automatic notifications on method execution or failure.
 
-## Features
+## ✅ Features
 
 - Send messages to a Telegram chat
 - Decorator-based notifications for method execution or errors
@@ -10,7 +10,7 @@ A lightweight Node.js library for sending messages to a Telegram chat, with opti
 - Support for sending photos and documents
 - Event listener for specific text commands
 
-## Prerequisites
+## 🧰 Prerequisites
 
 Before using this package, you’ll need:
 
@@ -30,7 +30,7 @@ Official guides:
 - https://core.telegram.org/bots/tutorial#obtain-your-bot-token
 - https://core.telegram.org/bots/features#creating-a-new-bot
 
-**Important:**  
+❗ **Important:**  
 Keep your bot token secure. Treat it like a password and never commit or share it publicly.
 
 ### Getting Your Chat ID
@@ -39,13 +39,13 @@ To find the chat ID where messages should be sent, follow this guide:
 
 - https://gist.github.com/nafiesl/4ad622f344cd1dc3bb1ecbe468ff9f8a#how-to-get-telegram-bot-chat-id
 
-## Installation
+## 📦 Installation
 
 ```bash
 npm install easy-telegram-bot
 ```
 
-## Basic Usage
+## 📖 Basic Usage
 
 ### Initialize the Bot
 
@@ -96,7 +96,7 @@ bot.onText(/\/hello/, (msg) => {
 
 ---
 
-## Decorator Usage
+## 📖 Decorator Usage
 
 The library provides decorators for automatically run the bot when a method runs or fails.
 
@@ -204,8 +204,7 @@ app.get("/", (req, res) => {
 });
 ```
 
-### Notes
-
+## ⚠️ Notes
 - Store your bot token and chat ID in environment variables for production use.
 - Decorators require TypeScript with `experimentalDecorators` enabled.
 
