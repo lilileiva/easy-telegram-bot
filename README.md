@@ -7,6 +7,8 @@ A lightweight Node.js library for sending messages to a Telegram chat, with opti
 - Send messages to a Telegram chat
 - Decorator-based notifications for method execution or errors
 - Works standalone or as Express middleware
+- Support for sending photos and documents
+- Event listener for specific text commands
 
 ## Prerequisites
 
@@ -45,25 +47,60 @@ npm install easy-telegram-bot
 
 ## Basic Usage
 
-### Send a Message Directly
+### Initialize the Bot
 
-Use the Bot class if you just want to send messages manually.
+You can use the `Bot` class to interact with the bot.
 
 ```typescript
 import { Bot } from "easy-telegram-bot";
 
 // Initialize the bot
 const bot = new Bot("YOUR_BOT_TOKEN", "YOUR_CHAT_ID");
+```
 
-// Send a message
+### Available Methods
+
+#### `sendMessage(message: string)`
+Sends a simple text message to the chat.
+
+```typescript
 bot.sendMessage("Hello, world!");
 ```
 
-### Decorator Usage
+#### `sendPhoto(photo: string | Buffer, caption?: string)`
+Sends a photo to the chat. You can pass a file path or a buffer.
+
+```typescript
+// Send by path
+bot.sendPhoto("./path/to/image.jpg", "Look at this!");
+```
+
+#### `sendDocument(document: string | Buffer, caption?: string)`
+Sends a document (file) to the chat.
+
+```typescript
+// Send by path
+bot.sendDocument("./path/to/file.pdf", "Here is the report");
+```
+
+#### `onText(command: RegExp, callback: (msg: any) => void)`
+Listens for messages that match a regular expression.
+
+```typescript
+// Listen for /hello command
+bot.onText(/\/hello/, (msg) => {
+  console.log("Received /hello command:", msg);
+  bot.sendMessage("Hello back!");
+});
+```
+
+---
+
+## Decorator Usage
 
 The library provides a `@BotMessage` decorator for automatically sending messages when a method runs or fails.
 
-#### Message Modes
+### Message Modes
 
 `ON_EXECUTE`
 Sends a message when the method executes successfully.
@@ -71,7 +108,7 @@ Sends a message when the method executes successfully.
 `ON_FAILURE` (default)
 Sends a message only when the method throws an error.
 
-#### Decorator Options
+### Decorator Options
 
 | Option | Type | Default | Description |
 | --- | --- | --- | --- |
@@ -79,21 +116,21 @@ Sends a message only when the method throws an error.
 | mode | MessageMode | ON_FAILURE | When to send the message |
 | details | boolean | true | Include method details |
 
-Initializing the Bot (Required for Decorators)
+### Initializing the Bot (Required for Decorators)
 
-Decorators require the bot to be initialized using BotMiddleware.
+Decorators require the bot to be initialized using `BotMiddleware` or `initBot`.
 
 #### Without Express
 
-If you are not using Express, initialize the middleware manually:
+If you are not using Express, initialize the bot manually:
 
 ```typescript
-import { BotMiddleware } from "easy-telegram-bot";
+import { initBot } from "easy-telegram-bot";
 
-BotMiddleware("YOUR_BOT_TOKEN", "YOUR_CHAT_ID");
+initBot("YOUR_BOT_TOKEN", "YOUR_CHAT_ID");
 ```
 
-### Using the Decorator
+#### Using the Decorator
 
 ```typescript
 import { BotMessage, MessageMode } from "easy-telegram-bot";
@@ -141,11 +178,10 @@ app.get("/", (req, res) => {
 
 ### Notes
 
-Store your bot token and chat ID in environment variables for production use
+- Store your bot token and chat ID in environment variables for production use.
+- Decorators require TypeScript with `experimentalDecorators` enabled.
 
-Decorators require TypeScript with experimentalDecorators enabled
-
-Example tsconfig.json:
+Example `tsconfig.json`:
 
 ```json
 {
@@ -153,3 +189,4 @@ Example tsconfig.json:
     "experimentalDecorators": true
   }
 }
+```

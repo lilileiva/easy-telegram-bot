@@ -24,12 +24,23 @@ export function BotMiddleware(token: string, chatId: string) {
 }
 
 /**
+ * Initializes the Telegram Bot.
+ * @param token Telegram Bot Token
+ * @param chatId Telegram Chat ID
+ */
+export function initBot(token: string, chatId: string) {
+    if (!botInstance) {
+        botInstance = new Bot(token, chatId);
+    }
+}
+
+/**
  * Retrieves the global bot instance.
  * @throws Error if the bot has not been initialized.
  */
 export function getBot(): Bot {
     if (!botInstance) {
-        throw new Error("Telegram Bot has not been initialized. Call BotMiddleware() first.");
+        throw new Error("Telegram Bot has not been initialized.");
     }
     return botInstance;
 }
