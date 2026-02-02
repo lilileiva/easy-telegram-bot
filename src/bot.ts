@@ -27,6 +27,7 @@ export class Bot {
       );
     } catch (error) {
       console.error("Error sending message to bot: ", error)
+      throw error;
     }
   }
 
@@ -67,6 +68,7 @@ export class Bot {
       );
     } catch (error) {
       console.error("Error sending photo to bot: ", error)
+      throw error;
     }
   }
 
@@ -84,6 +86,7 @@ export class Bot {
       );
     } catch (error) {
       console.error("Error sending document to bot: ", error)
+      throw error;
     }
   }
 }
