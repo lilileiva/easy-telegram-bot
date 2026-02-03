@@ -3,6 +3,7 @@ import TelegramBot from "node-telegram-bot-api";
 export class Bot {
   private bot: TelegramBot;
   private chatId: string;
+  private isPolling: boolean = false;
 
   /**
    * Initializes the bot with a token and chat ID.
@@ -36,8 +37,11 @@ export class Bot {
    * @param command The command to listen for.
    * @param callback The callback function to handle poll answers.
    */
-  onText(command: RegExp, callback: (msg: any) => void) {
-    this.bot.startPolling();
+  onText(command: RegExp, callback: (msg: TelegramBot.Message) => void) {
+    if (!this.isPolling) {
+      this.bot.startPolling();
+      this.isPolling = true;
+    }
 
     // Standard messages (private/groups)
     this.bot.onText(command, callback);
