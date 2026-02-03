@@ -4,6 +4,7 @@ export class Bot {
   private bot: TelegramBot;
   private chatId: string;
   private isPolling: boolean = false;
+  private textListeners: { regex: RegExp, callback: (msg: TelegramBot.Message) => void }[] = [];
 
   /**
    * Initializes the bot with a token and chat ID.
@@ -14,6 +15,18 @@ export class Bot {
 
     this.chatId = chatId;
     this.bot = new TelegramBot(token, { polling: false });
+
+    // Channels
+    this.bot.on("channel_post", (msg) => {
+      if (!msg.text) return;
+
+      this.textListeners.forEach(({ regex, callback }) => {
+        const strictRegex = new RegExp(regex.source, regex.flags.replace("g", ""));
+        if (strictRegex.test(msg.text!)) {
+          callback(msg);
+        }
+      });
+    });
   }
 
   /**
@@ -47,15 +60,7 @@ export class Bot {
     this.bot.onText(command, callback);
 
     // Channels
-    this.bot.on("channel_post", (msg) => {
-      if (!msg.text) return;
-
-      const regex = new RegExp(command.source, command.flags.replace("g", ""));
-
-      if (regex.test(msg.text)) {
-        callback(msg);
-      }
-    });
+    this.textListeners.push({ regex: command, callback });
   }
 
   /**
