@@ -1,3 +1,4 @@
+import "reflect-metadata";
 import { getBot, registerOnText } from "./instance";
 
 export enum BotMode {
@@ -25,8 +26,17 @@ export interface DocumentOptions {
     details?: boolean;
 }
 
+// Metadata key for storing BotOnText decorators on the class prototype
+const BOT_ON_TEXT_METADATA_KEY = Symbol.for('botOnTextMethods');
+
+interface BotOnTextMetadata {
+    propertyKey: string;
+    regex: RegExp;
+}
+
 /**
  * Decorator to register a method as an onText listener.
+ * Call `bindBotOnTextListeners(instance)` after creating your class instance is required.
  * @param regex The regex to listen for.
  */
 export function BotOnText(regex: RegExp) {
@@ -35,14 +45,40 @@ export function BotOnText(regex: RegExp) {
         propertyKey: string,
         descriptor: PropertyDescriptor
     ) {
-        const originalMethod = descriptor.value;
+        // Store metadata on the class prototype itself using reflect-metadata
+        const existingMethods: BotOnTextMetadata[] = Reflect.getMetadata(BOT_ON_TEXT_METADATA_KEY, target) || [];
+        existingMethods.push({ propertyKey, regex });
+        Reflect.defineMetadata(BOT_ON_TEXT_METADATA_KEY, existingMethods, target);
 
-        registerOnText(regex, (msg) => {
-            originalMethod.apply(target, [msg]);
-        });
-
+        console.log(`[BotOnText] Registered ${propertyKey} with regex ${regex}`);
         return descriptor;
     };
+}
+
+/**
+ * Binds all @BotOnText decorated methods to the bot for a specific instance.
+ * Call this after creating your class instance.
+ * @param instance The class instance containing decorated methods.
+ */
+export function bindBotOnTextListeners(instance: any) {
+    const prototype = Object.getPrototypeOf(instance);
+    const methods: BotOnTextMetadata[] = Reflect.getMetadata(BOT_ON_TEXT_METADATA_KEY, prototype) || [];
+
+    console.log(`[bindBotOnTextListeners] Found ${methods.length} methods for ${instance.constructor.name}`);
+
+    methods.forEach(({ propertyKey, regex }) => {
+        const method = instance[propertyKey];
+        if (typeof method === 'function') {
+            console.log(`[bindBotOnTextListeners] Binding ${propertyKey} with regex ${regex}`);
+            registerOnText(regex, async (msg) => {
+                try {
+                    await method.call(instance, msg);
+                } catch (error) {
+                    console.error(`Error in @BotOnText handler '${propertyKey}':`, error);
+                }
+            });
+        }
+    });
 }
 
 /**

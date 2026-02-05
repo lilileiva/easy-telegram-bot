@@ -3,6 +3,8 @@ import TelegramBot from "node-telegram-bot-api";
 export class Bot {
   private bot: TelegramBot;
   private chatId: string;
+  private isPolling: boolean = false;
+  private textListeners: { regex: RegExp, callback: (msg: TelegramBot.Message) => void }[] = [];
 
   /**
    * Initializes the bot with a token and chat ID.
@@ -13,10 +15,26 @@ export class Bot {
 
     this.chatId = chatId;
     this.bot = new TelegramBot(token, { polling: false });
+
+    // Channels
+    this.bot.on("channel_post", async (msg) => {
+      if (!msg.text) return;
+
+      for (const { regex, callback } of this.textListeners) {
+        const strictRegex = new RegExp(regex.source, regex.flags.replace("g", ""));
+        if (strictRegex.test(msg.text!)) {
+          try {
+            await callback(msg);
+          } catch (error) {
+            console.error("Error in channel_post listener:", error);
+          }
+        }
+      }
+    });
   }
 
   /**
-   * Sends a message to the bot.
+   * Sends a message to the configured chat ID.
    * @param message The message to send
    */
   async sendMessage(message: string) {
@@ -27,6 +45,7 @@ export class Bot {
       );
     } catch (error) {
       console.error("Error sending message to bot: ", error)
+      throw error;
     }
   }
 
@@ -35,22 +54,17 @@ export class Bot {
    * @param command The command to listen for.
    * @param callback The callback function to handle poll answers.
    */
-  onText(command: RegExp, callback: (msg: any) => void) {
-    this.bot.startPolling();
+  onText(command: RegExp, callback: (msg: TelegramBot.Message) => void) {
+    if (!this.isPolling) {
+      this.bot.startPolling();
+      this.isPolling = true;
+    }
 
     // Standard messages (private/groups)
     this.bot.onText(command, callback);
 
     // Channels
-    this.bot.on("channel_post", (msg) => {
-      if (!msg.text) return;
-
-      const regex = new RegExp(command.source, command.flags.replace("g", ""));
-
-      if (regex.test(msg.text)) {
-        callback(msg);
-      }
-    });
+    this.textListeners.push({ regex: command, callback });
   }
 
   /**
@@ -67,6 +81,7 @@ export class Bot {
       );
     } catch (error) {
       console.error("Error sending photo to bot: ", error)
+      throw error;
     }
   }
 
@@ -84,6 +99,7 @@ export class Bot {
       );
     } catch (error) {
       console.error("Error sending document to bot: ", error)
+      throw error;
     }
   }
 }

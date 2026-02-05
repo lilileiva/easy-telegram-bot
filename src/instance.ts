@@ -1,10 +1,11 @@
+import TelegramBot from "node-telegram-bot-api";
 import { Bot } from "./bot";
 
 let botInstance: Bot | null = null;
 
 interface PendingListener {
     regex: RegExp;
-    callback: (msg: any) => void;
+    callback: (msg: TelegramBot.Message) => void;
 }
 
 const pendingListeners: PendingListener[] = [];
@@ -32,7 +33,7 @@ export function initBot(token: string, chatId: string): Bot {
  * If the bot is already initialized, it registers immediately.
  * Otherwise, it stores it in a pending list.
  */
-export function registerOnText(regex: RegExp, callback: (msg: any) => void) {
+export function registerOnText(regex: RegExp, callback: (msg: TelegramBot.Message) => void) {
     if (botInstance) {
         botInstance.onText(regex, callback);
     } else {

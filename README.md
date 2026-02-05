@@ -84,7 +84,7 @@ bot.sendDocument("./path/to/file.pdf", "Here is the report");
 ```
 
 #### `onText(command: RegExp, callback: (msg: any) => void)`
-Listens for messages that match a regular expression.
+Listens for messages that match a regular expression. 
 
 ```typescript
 // Listen for /hello command
@@ -183,6 +183,23 @@ class TestService {
         // ...
     }
 }
+```
+
+`@BotOnText` decorator requires calling `bindBotOnTextListeners`
+
+```typescript
+import { initBot, BotOnText, bindBotOnTextListeners } from 'easy-telegram-bot';
+
+class MyHandler {
+  @BotOnText(/\/hello/)
+  handleHello(msg) {
+    console.log('Hello!');
+  }
+}
+
+initBot(token, chatId);
+const handler = new MyHandler();
+bindBotOnTextListeners(handler); // Required
 ```
 
 #### Using as Express Middleware
