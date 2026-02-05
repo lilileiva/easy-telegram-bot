@@ -17,20 +17,24 @@ export class Bot {
     this.bot = new TelegramBot(token, { polling: false });
 
     // Channels
-    this.bot.on("channel_post", (msg) => {
+    this.bot.on("channel_post", async (msg) => {
       if (!msg.text) return;
 
-      this.textListeners.forEach(({ regex, callback }) => {
+      for (const { regex, callback } of this.textListeners) {
         const strictRegex = new RegExp(regex.source, regex.flags.replace("g", ""));
         if (strictRegex.test(msg.text!)) {
-          callback(msg);
+          try {
+            await callback(msg);
+          } catch (error) {
+            console.error("Error in channel_post listener:", error);
+          }
         }
-      });
+      }
     });
   }
 
   /**
-   * Sends a message to the bot.
+   * Sends a message to the configured chat ID.
    * @param message The message to send
    */
   async sendMessage(message: string) {
